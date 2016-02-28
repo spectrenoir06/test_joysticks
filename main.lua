@@ -39,7 +39,7 @@ function love.load()
 	gr.setFont(main_font)
 	joy_index=1-- Index to see a joystick.
 	current_joy=nil
-	ass=math.floor(125)-- Axes square's size.
+	ass=math.floor(50)-- Axes square's size.
 	asx,asy=10,100-- Coordenates for the first axis pair.
 	gr.setLineStyle("rough")
 	gr.setBackgroundColor(0,31,31)
@@ -105,7 +105,6 @@ function love.draw()
 			next_distance=next_distance+ass*.55
 		end
 
-		next_distance=ass/2
 		for k,v in ipairs(gamepadKey) do
 			--print(current_joy:getID())
 			table.insert(buttons,false)
@@ -114,14 +113,13 @@ function love.draw()
 				buttons[v]=true-- Mark the button as "ok".
 				gr.setColor(255,255,255)
 			end
-			gr.circle("line",next_distance,asy+ass*1.7 +75,ass/4)
-			if buttons[v] then gr.setColor(0,255,0) end
+			gr.circle("line", 25, 225 + (k-1) * 30, ass/4)
 			gr.setColor(255,255,255)
 			if buttons[v] then gr.setColor(0,255,0) end
 			gr.print(
 				v,
-				next_distance - main_font:getWidth("" .. v) / 2,
-				75 + asy + ass * 1.7 - main_font:getHeight() / 2
+				25 +20,
+				225 + (k-1) * 30 - 8
 			)
 			gr.setColor(255,255,255)
 			next_distance=next_distance+ass*.55
@@ -138,11 +136,11 @@ function love.draw()
 		for k,v in ipairs(gamepadAxis) do
 			local axis = current_joy:getGamepadAxis(v)
 			gr.setColor(255,255,255)
-			love.graphics.print(v..": "..math.floor(axis*100), 15, 450 + (k-1) * 45 + 12)
+			love.graphics.print(v..": "..math.floor(axis*100),350 +  15, 250 + (k-1) * 45 + 12)
 			gr.setColor(0,255,0)
-			love.graphics.rectangle("fill", 150 + 100, 450 + (k-1) * 45, axis*100, 40)
+			love.graphics.rectangle("fill", 350 + 150 + 100, 250 + (k-1) * 45, axis*100, 40)
 			gr.setColor(0,0,0)
-			love.graphics.rectangle("line", 150, 450 + (k-1) * 45, 200, 40)
+			love.graphics.rectangle("line", 350 + 150, 250 + (k-1) * 45, 200, 40)
 			-- -- Axis:
 			-- gr.setColor(0,127,0)
 			-- -- Vertical line:
