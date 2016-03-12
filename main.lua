@@ -6,6 +6,8 @@ function love.load()
 	mo=love.mouse
 	js=love.joystick
 
+	love.joystick.loadGamepadMappings("gamecontrollerdb.map")
+
 	gamepadKey = {
 		"a",
 		"b",
@@ -101,7 +103,7 @@ function love.draw()
 			gr.circle("line",next_distance,asy+ass*1.7,ass/4)
 			if buttons[i] then gr.setColor(0,255,0) end
 			gr.setColor(255,255,255)
-			gr.print(i,next_distance-main_font:getWidth(""..i)/2,asy+ass*1.7-main_font:getHeight()/2)
+			gr.print(i-1,next_distance-main_font:getWidth(""..i-1)/2,asy+ass*1.7-main_font:getHeight()/2)
 			next_distance=next_distance+ass*.55
 		end
 
