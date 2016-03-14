@@ -27,6 +27,9 @@ a3060cff000000000000504944564944,Saitek P2500,a:b2,b:b3,y:b1,x:b0,start:b4,guide
 83056020000000000000504944564944,iBuffalo USB 2-axis 8-button Gamepad,a:b1,b:b0,y:b2,x:b3,start:b7,back:b6,leftshoulder:b4,rightshoulder:b5,leftx:a0,lefty:a1,platform:Windows,
 10080100000000000000504944564944,PS1 USB,platform:Windows,a:b2,b:b1,x:b3,y:b0,back:b8,start:b9,leftshoulder:b6,rightshoulder:b7,leftstick:b10,rightstick:b11,leftx:a0,lefty:a1,rightx:a3,righty:a2,lefttrigger:b4,righttrigger:b5,dpup:h0.1,dpleft:h0.8,dpdown:h0.4,dpright:h0.2,
 
+b5071302000000000000504944564944,Mega World USB 2-Axis 8-Button Gamepad,a:b3,b:b2,x:b1,y:b0,start:b4,back:b5,leftx:a0,lefty:a1,platform:Windows,
+1104c600000000000000504944564944,BUFFALO BGC-FC801 USB Gamepad,a:b0,b:b1,x:b2,y:b3,leftx:a0,start:b6,back:b7,lefty:a1,leftshoulder:b4,rightshoulder:b5,platform:Windows,
+
 # OS X
 0500000047532047616d657061640000,GameStop Gamepad,a:b0,b:b1,back:b8,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:,leftshoulder:b4,leftstick:b10,lefttrigger:b6,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b11,righttrigger:b7,rightx:a2,righty:a3,start:b9,x:b2,y:b3,platform:Mac OS X,
 6d0400000000000016c2000000000000,Logitech F310 Gamepad (DInput),a:b1,b:b2,back:b8,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,leftshoulder:b4,leftstick:b10,lefttrigger:b6,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b11,righttrigger:b7,rightx:a2,righty:a3,start:b9,x:b0,y:b3,platform:Mac OS X,
@@ -45,6 +48,10 @@ a3060cff000000000000504944564944,Saitek P2500,a:b2,b:b3,y:b1,x:b0,start:b4,guide
 AD1B00000000000001F9000000000000,Gamestop BB-070 X360 Controller,a:b0,b:b1,back:b9,dpdown:b12,dpleft:b13,dpright:b14,dpup:b11,guide:b10,leftshoulder:b4,leftstick:b6,lefttrigger:a2,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b7,righttrigger:a5,rightx:a3,righty:a4,start:b8,x:b2,y:b3,platform:Mac OS X,
 050000005769696d6f74652028303000,Wii Remote,a:b4,b:b5,y:b9,x:b10,start:b6,guide:b8,back:b7,dpup:b2,dpleft:b0,dpdown:b3,dpright:b1,leftx:a0,lefty:a1,lefttrigger:b12,righttrigger:,leftshoulder:b11,platform:Mac OS X,
 83050000000000006020000000000000,iBuffalo USB 2-axis 8-button Gamepad,a:b1,b:b0,x:b3,y:b2,back:b6,start:b7,leftshoulder:b4,rightshoulder:b5,leftx:a0,lefty:a1,platform:Mac OS X,
+
+b5070000000000001302000000000000,Mega World USB 2-Axis 8-Button Gamepad,a:b3,b:b2,x:b1,y:b0,start:b4,back:b5,leftx:a0,lefty:a1,platform:Mac OS X,
+1104000000000000c600000000000000,BUFFALO BGC-FC801 USB Gamepad,a:b0,b:b1,x:b2,y:b3,leftx:a0,start:b6,back:b7,lefty:a1,leftshoulder:b4,rightshoulder:b5,platform:Mac OS X,
+
 
 # Linux
 0500000047532047616d657061640000,GameStop Gamepad,a:b0,b:b1,back:b8,dpdown:h0.4,dpleft:h0.8,dpright:h0.2,dpup:h0.1,guide:,leftshoulder:b4,leftstick:b10,lefttrigger:b6,leftx:a0,lefty:a1,rightshoulder:b5,rightstick:b11,righttrigger:b7,rightx:a2,righty:a3,start:b9,x:b2,y:b3,platform:Linux,
@@ -106,6 +113,9 @@ AD1B00000000000001F9000000000000,Gamestop BB-070 X360 Controller,a:b0,b:b1,back:
 03000000a306000018f5000010010000,Saitek PLC Saitek P3200 Rumble Pad,platform:Linux,x:b0,a:b1,b:b2,y:b3,back:b8,start:b9,dpleft:h0.8,dpdown:h0.0,dpdown:h0.4,dpright:h0.0,dpright:h0.2,dpup:h0.0,dpup:h0.1,leftshoulder:h0.0,leftshoulder:b4,lefttrigger:a2,rightshoulder:b6,rightshoulder:b5,righttrigger:b7,leftstick:b10,rightstick:b11,leftx:a0,lefty:a1,rightx:a3,righty:a4,
 03000000830500006020000010010000,iBuffalo USB 2-axis 8-button Gamepad,a:b1,b:b0,x:b3,y:b2,back:b6,start:b7,leftshoulder:b4,rightshoulder:b5,leftx:a0,lefty:a1,platform:Linux,
 03000000c9110000f055000011010000,HJC Game GAMEPAD,leftx:a0,lefty:a1,dpdown:h0.4,rightstick:b11,rightshoulder:b5,rightx:a2,start:b9,righty:a3,dpleft:h0.8,lefttrigger:b6,x:b2,dpup:h0.1,back:b8,leftstick:b10,leftshoulder:b4,y:b3,a:b0,dpright:h0.2,righttrigger:b7,b:b1,platform:Linux,
+
+03000000b50700001302000000010000,Mega World USB 2-Axis 8-Button Gamepad,a:b3,b:b2,x:b1,y:b0,leftx:a0,start:b4,back:b5,lefty:a1,platform:Linux,
+0300000011040000c600000010010000,BUFFALO BGC-FC801 USB Gamepad,a:b0,b:b1,x:b2,y:b3,leftx:a0,start:b6,back:b7,lefty:a1,leftshoulder:b4,rightshoulder:b5,platform:Linux,
 
 # Android
 
