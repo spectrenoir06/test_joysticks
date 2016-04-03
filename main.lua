@@ -96,9 +96,6 @@ function love.draw()
 
 		drawGamepad(500 + 20, 10)
 		drawGamepadInput(520, 400)
-	else
-		gr.print("No joysticks were found :(", 10, 10)
-		buttons={}
 	end
 end
 
@@ -260,7 +257,7 @@ function drawGamepadInput(x,y)
 	drawnSingleAxis(x+ 1 + 145 * 2, y + 1 + 150, gamepadText.Left_Stick_Y, "righty", 0.5)
 
 	drawnSingleAxis(x+ 1 + 145 * 2, y + 1 + 200, gamepadText.LT, "triggerleft", 0.5, 0.5, true)
-	drawnSingleAxis(x+ 1 + 145 * 2, y + 1 + 250, gamepadText.RT, "triggerright", 0.5, 0.5, true)
+	drawnSingleAxis(x+ 1 + 145 * 2, y + 1 + 250, gamepadText.RT, "triggerright", 0.5, 0.5, true	)
 
 end
 
