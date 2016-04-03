@@ -51,14 +51,12 @@ function love.load()
 	main_font = gr.newFont(math.floor(15))
 	min_font = gr.newFont(math.floor(12))
 	gr.setFont(main_font)
-	joy_index = 1-- Index to see a joystick.
+
 	current_joy = nil
-	ass=math.floor(50)-- Axes square's size.
-	asx,asy=10,100-- Coordenates for the first axis pair.
+
 	gr.setLineStyle("rough")
 	gr.setBackgroundColor(0,31,31)
-	buttons={}-- All the available buttons.
-
+	
 	joysticks = {}
 end
 
