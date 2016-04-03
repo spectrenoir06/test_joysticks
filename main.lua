@@ -284,7 +284,6 @@ function drawnSingleInput(x, y, img, input, rx, ry, color)
 	gr.setColor(50,50,50)
 	if inputtype == "button" then
 		gr.print(inputindex and ("Button_"..inputindex) or "None", x + 55, y + 16)
-		print( inputtype, inputindex, hatdirection , input)
 		if isButton(input) and current_joy:isGamepadDown(input) then
 			gr.setColor(100,100,100)
 		else
