@@ -51,8 +51,8 @@ function love.load()
 	main_font = gr.newFont(math.floor(15))
 	min_font = gr.newFont(math.floor(12))
 	gr.setFont(main_font)
-	joy_index=1-- Index to see a joystick.
-	current_joy=nil
+	joy_index = 1-- Index to see a joystick.
+	current_joy = nil
 	ass=math.floor(50)-- Axes square's size.
 	asx,asy=10,100-- Coordenates for the first axis pair.
 	gr.setLineStyle("rough")
@@ -63,8 +63,20 @@ function love.load()
 end
 
 function love.joystickadded(joy)
-	table.insert(joysticks, joy)
+	joysticks[joy] = joy
+	if not current_joy then current_joy = joy end
 end
+
+function love.joystickremoved(joy)
+	joysticks[joy] = nil
+	if current_joy == joy then
+		current_joy = nil
+		for k,v in pairs(joysticks) do
+			current_joy = v
+		end
+	end
+end
+
 
 function love.update(dt)
 
@@ -72,15 +84,14 @@ end
 function love.draw()
 	gr.setColor(255,255,255)
 	gr.setLineWidth(1)
-	if #joysticks>0 then
-		current_joy=joysticks[joy_index]
-		gr.print("Name: "..joysticks[joy_index]:getName(),10,10)
-		gr.print("GUID: "..joysticks[joy_index]:getGUID(),10,30)
-		gr.print("Vibration Supported: "..(joysticks[joy_index]:isVibrationSupported() and "Yes" or "False"), 10, 50)
 
-		drawAxis(10, 130)
-		drawButton(10, 380)
-		drawHat(10, 530)
+	drawJoyList(10, 10)
+
+	if current_joy then
+		drawInfo(10,130)
+		drawAxis(10, 130 + 60)
+		drawButton(10, 380 + 60)
+		drawHat(10, 530 + 60)
 
 		drawGamepad(1280-600 + 10, 35)
 		drawGamepadInput(900, 400)
@@ -333,7 +344,7 @@ end
 
 function drawHat(x, y)
 	gr.setLineWidth(1)
-	gr.rectangle("line",x,y, 500, 180)
+	gr.rectangle("line",x,y, 500, 120)
 
 
 	local hat_count = current_joy:getHatCount()
@@ -363,10 +374,61 @@ function drawHat(x, y)
 	end
 end
 
+function drawInfo(x, y)
+	gr.rectangle("line",x,y, 500, 60)
+	gr.print("Name: "..current_joy:getName(), x, y)
+	gr.print("GUID: "..current_joy:getGUID(), x, y + 20)
+	gr.print("Vibration Supported: "..(current_joy:isVibrationSupported() and "Yes" or "False"), x, y + 40)
+end
+
+function drawJoyList(x, y)
+	gr.rectangle("line", x, y, 500, 120)
+
+	local i = 0
+	for k, v in pairs(joysticks) do
+		if (v == current_joy) then
+			gr.setColor(255,255,255)
+			gr.print(">", x + 5, y + (15 * i) + 25)
+		else
+
+		end
+		gr.print(v:getName(), x + 15 + 10, y + (15 * i) + 25)
+		-- gr.print(v:getGUID(), x + 350, y + (15 * i) + 25)
+		i = i + 1
+	end
+
+	if i > 0 then
+		gr.print("Gamepad: "..i, x, y)
+	else
+		gr.print("Gamepad: None", x, y)
+	end
+end
 
 function love.keypressed(key)
 	if key=="escape" then
 		love.event.quit()
+		print(love.joystick.saveGamepadMappings())
 	end
-	-- print(love.joystick.saveGamepadMappings())
+	if key == "up" then
+		local tab = {}
+		local id = 0
+		local i = 1
+		for k,v in pairs(joysticks) do
+			table.insert(tab, v)
+			if v == current_joy then id = i end
+			i = i + 1
+		end
+		if tab[id - 1] then current_joy = tab[id - 1] end
+	end
+	if key == "down" then
+		local tab = {}
+		local id = 0
+		local i = 1
+		for k,v in pairs(joysticks) do
+			table.insert(tab, v)
+			if v == current_joy then id = i end
+			i = i + 1
+		end
+		if tab[id + 1] then current_joy = tab[id + 1] end
+	end
 end
