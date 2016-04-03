@@ -81,8 +81,8 @@ function love.draw()
 		gr.print("Hat: "..joysticks[joy_index]:getHatCount(),10,90)
 		gr.print("Vibration Supported: "..(joysticks[joy_index]:isVibrationSupported() and "Yes" or "False"), 10, 110)
 
-		drawAxis(100,120)
-		drawButton(20, 120)
+		drawAxis(30,200)
+		drawButton(30, 150)
 
 		drawGamepad(1280-600 + 10, 35)
 		drawGamepadInput(900, 400)
@@ -301,20 +301,21 @@ function drawButton(x, y)
 
 	for i=1,button_count do
 		local isDown = current_joy:isDown(i)
-		-- gr.setColor(0,0,0)
-		gr.setColor(255,255,255)
+
+		local px = x + (i-1) * 28 - math.floor((i-1)/10) * 280
+		local py = y + math.floor((i-1)/10) * 28
 
 		if isDown then
 			gr.setColor(255,0,0)
 		else
 			gr.setColor(100,100,100)
 		end
-		gr.circle("fill", x, y + i * 28 + 4, 12)
+		gr.circle("fill", px, py + 4, 12)
 
 		gr.setColor(255,255,255)
 
-		gr.circle("line", x, y + i * 28 + 4, 12)
-		gr.print(i-1, x - main_font:getWidth(""..i-1)/2, y + i * 28 - 5)
+		gr.circle("line", px, py + 4, 12)
+		gr.print(i-1, px - main_font:getWidth(""..i-1)/2, py - 5)
 	end
 end
 
