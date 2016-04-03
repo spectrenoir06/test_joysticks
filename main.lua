@@ -8,6 +8,17 @@ function love.load()
 
 	love.joystick.loadGamepadMappings("gamecontrollerdb.map")
 
+	gamepadText = {}
+
+	local tab = love.filesystem.getDirectoryItems("media/")
+
+	for k, v in ipairs(tab) do
+		v = v:gsub(".png$","")
+		v = v:gsub("360_","")
+		print(k,v)
+		gamepadText[v] = gr.newImage("media/360_"..v..".png")
+	end
+
 	gamepadKey = {
 		"a",
 		"b",
@@ -157,9 +168,101 @@ function love.draw()
 		gr.print("No joysticks were found :(",10,10)
 		buttons={}
 	end
+	drawGamepad(1280-600 + 10, 35)
 end
+
+function drawGamepad(x,y)
+	gr.setColor(255,255,255)
+	gr.draw(gamepadText.Gamepad, x, y)
+
+	if current_joy:isGamepadDown("a") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	gr.draw(gamepadText.A, x + 440, y + 147, 0, 0.5, 0.5)
+
+	if current_joy:isGamepadDown("b") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	gr.draw(gamepadText.B, x + 484, y + 103, 0, 0.5, 0.5)
+
+	if current_joy:isGamepadDown("y") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	gr.draw(gamepadText.Y, x + 440, y + 59, 0, 0.5, 0.5)
+
+	if current_joy:isGamepadDown("x") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	gr.draw(gamepadText.X, x + 396, y + 103, 0, 0.5, 0.5)
+
+	if current_joy:isGamepadDown("leftstick") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	local axis_x = current_joy:getGamepadAxis("leftx")
+	local axis_y = current_joy:getGamepadAxis("lefty")
+
+	gr.draw(gamepadText.Left_Stick, x + 81 + axis_x * 12, y + 77 + axis_y * 12)
+
+	if current_joy:isGamepadDown("rightstick") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	local axis_x = current_joy:getGamepadAxis("rightx")
+	local axis_y = current_joy:getGamepadAxis("righty")
+	gr.draw(gamepadText.Right_Stick, x + 330 + axis_x * 12, y + 179 + axis_y * 12)
+
+	gr.setColor(255,255,255)
+	gr.draw(gamepadText.Dpad, x + 164, y + 177)
+	love.graphics.setBlendMode("lighten","premultiplied")
+	if current_joy:isGamepadDown("dpdown") then gr.draw(gamepadText.Dpad_Down, x + 164, y + 177) end
+	if current_joy:isGamepadDown("dpup") then gr.draw(gamepadText.Dpad_Up, x + 164, y + 177) end
+	if current_joy:isGamepadDown("dpleft") then gr.draw(gamepadText.Dpad_Left, x + 164, y + 177) end
+	if current_joy:isGamepadDown("dpright") then gr.draw(gamepadText.Dpad_Right, x + 164, y + 177) end
+	love.graphics.setBlendMode("alpha")
+
+	if current_joy:isGamepadDown("back") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	gr.draw(gamepadText.Back, x + 213, y + 111, 0, 0.5, 0.5)
+
+	if current_joy:isGamepadDown("start") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	gr.draw(gamepadText.Start, x + 337, y + 111, 0, 0.5, 0.5)
+
+	if current_joy:isGamepadDown("leftshoulder") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	gr.draw(gamepadText.LB, x + 78, y + -50)
+
+	if current_joy:isGamepadDown("rightshoulder") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	gr.draw(gamepadText.RB, x + 423, y + -50)
+
+end
+
 function love.keypressed(key)
-	if key=="q" then
+	if key=="escape" then
 		love.event.quit()
 	end
 end
