@@ -1,6 +1,4 @@
--- Nice Joystick Tester, by tavuntu, GPL License and you know the rest.
 function love.load()
-	print(love.system.getOS())
 	gr=love.graphics
 	kb=love.keyboard
 	mo=love.mouse
@@ -15,7 +13,6 @@ function love.load()
 	for k, v in ipairs(tab) do
 		v = v:gsub(".png$","")
 		v = v:gsub("360_","")
-		print(k,v)
 		gamepadText[v] = gr.newImage("media/360_"..v..".png")
 	end
 
