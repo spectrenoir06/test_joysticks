@@ -76,13 +76,11 @@ function love.draw()
 		current_joy=joysticks[joy_index]
 		gr.print("Name: "..joysticks[joy_index]:getName(),10,10)
 		gr.print("GUID: "..joysticks[joy_index]:getGUID(),10,30)
-		gr.print("Axis: "..joysticks[joy_index]:getAxisCount(),10,50)
-		gr.print("Button: "..joysticks[joy_index]:getButtonCount(),10,70)
-		gr.print("Hat: "..joysticks[joy_index]:getHatCount(),10,90)
-		gr.print("Vibration Supported: "..(joysticks[joy_index]:isVibrationSupported() and "Yes" or "False"), 10, 110)
+		gr.print("Vibration Supported: "..(joysticks[joy_index]:isVibrationSupported() and "Yes" or "False"), 10, 50)
 
-		drawAxis(30,200)
-		drawButton(30, 150)
+		drawAxis(10, 130)
+		drawButton(10, 380)
+		drawHat(10, 530)
 
 		drawGamepad(1280-600 + 10, 35)
 		drawGamepadInput(900, 400)
@@ -270,17 +268,22 @@ function drawGamepadInput(x,y)
 end
 
 function drawAxis(x, y)
+
+	gr.rectangle("line",x,y, 500, 250)
+
 	local axis_count=current_joy:getAxisCount()
 	if axis_count == 0 then
-		gr.print("No axes :(", x, y)
+		gr.print("Axis: No axes", x, y)
 	else
+		gr.print("Axis: "..axis_count, x, y)
+
 		for i=1, axis_count do
 
-			local px = x + math.floor((i-1)/10) * 100
-			local py = i * 20 + y - math.floor((i-1)/10) * 200
+			local px = x + math.floor((i-1)/10) * 100 + 15
+			local py = i * 20 + y - math.floor((i-1)/10) * 200 + 10
 
 			gr.setColor(255,255,255)
-			gr.print((i-1)..":", px - main_font:getWidth(""..i-1), py)
+			gr.print((i-1)..":", px - main_font:getWidth(""..(i-1)..":"), py)
 
 			gr.setColor((current_joy:getAxis(i)*255), 255 - math.abs(current_joy:getAxis(i)*255), -(current_joy:getAxis(i)*255))
 			gr.rectangle("fill", px + 35, py, (current_joy:getAxis(i)*25), 18)
@@ -297,13 +300,22 @@ end
 
 function drawButton(x, y)
 	gr.setLineWidth(1)
+
+	gr.rectangle("line",x,y, 284, 150)
+
 	local button_count = current_joy:getButtonCount()
+
+	if button_count == 0 then
+		gr.print("Button: No button", x, y)
+	else
+		gr.print("Button: "..button_count, x, y)
+	end
 
 	for i=1,button_count do
 		local isDown = current_joy:isDown(i)
 
-		local px = x + (i-1) * 28 - math.floor((i-1)/10) * 280
-		local py = y + math.floor((i-1)/10) * 28
+		local px = x + (i-1) * 28 - math.floor((i-1)/10) * 280 + 14
+		local py = y + math.floor((i-1)/10) * 28 + 12 + 25
 
 		if isDown then
 			gr.setColor(255,0,0)
@@ -316,6 +328,38 @@ function drawButton(x, y)
 
 		gr.circle("line", px, py + 4, 12)
 		gr.print(i-1, px - main_font:getWidth(""..i-1)/2, py - 5)
+	end
+end
+
+function drawHat(x, y)
+	gr.setLineWidth(1)
+	gr.rectangle("line",x,y, 500, 180)
+
+
+	local hat_count = current_joy:getHatCount()
+
+	if hat_count == 0 then
+		gr.print("Hat: No Hat", x, y)
+	else
+		gr.print("Hat: "..hat_count, x, y)
+	end
+
+	for i=1, hat_count do
+		local d = current_joy:getHat(i)
+
+		local px = x + (i-1) * 50 - math.floor((i-1)/10) * 50 * 10
+		local py = y + math.floor((i-1)/10) * 50 + 20
+
+		gr.draw(gamepadText.Dpad, px, py, 0, 0.5)
+		gr.setBlendMode("lighten","premultiplied")
+		if d=="d" or d=="ld" or d=="rd" then gr.draw(gamepadText.Dpad_Down, px, py, 0, 0.5) end
+		if d=="u" or d=="lu" or d=="ru" then gr.draw(gamepadText.Dpad_Up, px, py, 0, 0.5) end
+		if d=="l" or d=="ld" or d=="lu" then gr.draw(gamepadText.Dpad_Left, px, py, 0, 0.5) end
+		if d=="r" or d=="rd" or d=="ru" then gr.draw(gamepadText.Dpad_Right, px, py, 0, 0.5) end
+		gr.setBlendMode("alpha")
+		local lx, ly = gamepadText.Dpad:getWidth()/2, gamepadText.Dpad:getHeight()/2
+		gr.print(i-1, px + lx/2 - main_font:getWidth(""..i-1)/2, py + ly/2 - main_font:getHeight(""..i-1)/2)
+
 	end
 end
 
