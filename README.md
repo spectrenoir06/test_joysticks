@@ -6,9 +6,9 @@ Todo
 - [x] display virtual gamepad input
 - [x] display virtual input to real input
 - [ ] Edit gamepad mappings
-- [ ] Save gamepad mappings
-- [ ] Load gamepad mappings
-- [ ] Button to test vibration 
+- [ ] Save gamepad mappings (to clipboard and to a file)
+- [ ] Load gamepad mappings (drag and drop)
+- [ ] Button to test vibration
 
 Screenshot
 ----
