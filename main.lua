@@ -48,7 +48,8 @@ function love.load()
 
 	win={w=gr.getWidth(),h=gr.getHeight()}-- Window.
 	--mo.setVisible(false)
-	main_font=gr.newFont(math.floor(15))
+	main_font = gr.newFont(math.floor(15))
+	min_font = gr.newFont(math.floor(12))
 	gr.setFont(main_font)
 	joy_index=1-- Index to see a joystick.
 	current_joy=nil
@@ -57,14 +58,20 @@ function love.load()
 	gr.setLineStyle("rough")
 	gr.setBackgroundColor(0,31,31)
 	buttons={}-- All the available buttons.
+
+	joysticks = {}
 end
+
+function love.joystickadded(joy)
+	table.insert(joysticks, joy)
+end
+
 function love.update(dt)
 
 end
 function love.draw()
 	gr.setColor(255,255,255)
 	gr.setLineWidth(1)
-	local joysticks = js.getJoysticks()
 	if #joysticks>0 then
 		current_joy=joysticks[joy_index]
 		gr.print("Name: "..joysticks[joy_index]:getName(),10,10)
@@ -72,9 +79,10 @@ function love.draw()
 		gr.print("Axis: "..joysticks[joy_index]:getAxisCount(),10,50)
 		gr.print("Button: "..joysticks[joy_index]:getButtonCount(),10,70)
 		gr.print("Hat: "..joysticks[joy_index]:getHatCount(),10,90)
+		gr.print("Vibration Supported: "..(joysticks[joy_index]:isVibrationSupported() and "Yes" or "False"), 10, 110)
 
-		drawAxis(100,100)
-		drawButton(20, 100)
+		drawAxis(100,120)
+		drawButton(20, 120)
 
 		drawGamepad(1280-600 + 10, 35)
 		drawGamepadInput(900, 400)
@@ -268,15 +276,21 @@ function drawAxis(x, y)
 	else
 		for i=1, axis_count do
 
+			local px = x + math.floor((i-1)/10) * 100
+			local py = i * 20 + y - math.floor((i-1)/10) * 200
+
 			gr.setColor(255,255,255)
-			gr.print(i-1, x, i * 20 + y)
+			gr.print((i-1)..":", px - main_font:getWidth(""..i-1), py)
 
 			gr.setColor((current_joy:getAxis(i)*255), 255 - math.abs(current_joy:getAxis(i)*255), -(current_joy:getAxis(i)*255))
-			gr.rectangle("fill", x + 60, i * 20 + y, (current_joy:getAxis(i)*25), 18)
+			gr.rectangle("fill", px + 35, py, (current_joy:getAxis(i)*25), 18)
 
 			gr.setColor(255,255,255)
-			gr.print(math.floor(current_joy:getAxis(i) * 100), x + 100, i * 20 + y)
-			gr.rectangle("line", x + 35, i * 20 + y, 50, 18)
+			local val = math.floor(current_joy:getAxis(i) * 100).."%"
+			love.graphics.setFont(min_font)
+			gr.print(val, px + 59 - min_font:getWidth(val), py + 1)
+			love.graphics.setFont(main_font)
+			gr.rectangle("line", px + 10, py, 50, 18)
 		end
 	end
 end
@@ -301,7 +315,6 @@ function drawButton(x, y)
 
 		gr.circle("line", x, y + i * 28 + 4, 12)
 		gr.print(i-1, x - main_font:getWidth(""..i-1)/2, y + i * 28 - 5)
-		-- next_distance=next_distance+ass*.55
 	end
 end
 
