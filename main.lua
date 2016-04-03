@@ -6,7 +6,7 @@ function love.load()
 	mo=love.mouse
 	js=love.joystick
 
-	love.joystick.loadGamepadMappings("gamecontrollerdb.map")
+	-- love.joystick.loadGamepadMappings("gamecontrollerdb.map")
 
 	gamepadText = {}
 
@@ -67,108 +67,21 @@ function love.draw()
 	local joysticks = js.getJoysticks()
 	if #joysticks>0 then
 		current_joy=joysticks[joy_index]
-		gr.print(joysticks[joy_index]:getName()..", GUID:"..joysticks[joy_index]:getGUID(),10,10)
-		local axis_count=current_joy:getAxisCount()
-		-- Show axes info:
-		gr.print("Axes:",asx,asy-main_font:getHeight()*1.1)
-		gr.setColor(0,255,0)
-		gr.setColor(0,255,0)
-		local next_distance=0
-		for i=1,axis_count/2 do
-			local x=asx+next_distance
-			gr.rectangle("line",x,asy,ass,ass)
-			next_distance=ass*1.1
-		end
-		gr.setColor(255,255,255)
-		next_distance=0
-		for i=1,axis_count,2 do
-			-- Axis:
-			local x_axis=math.floor(asx+next_distance+ass/2-current_joy:getAxis(i)*-1*ass/2-2)
-			local y_axis=math.floor(asy+ass/2-current_joy:getAxis(i+1)*-1*ass/2-2)
-			gr.setColor(0,127,0)
-			-- Vertical line:
-			gr.line(x_axis+2,asy+2,x_axis+2,asy+ass-3)
-			-- Horizontal:
-			gr.line(asx+next_distance+2,y_axis+2,asx+next_distance+ass-3,y_axis+2)
-			gr.setColor(255,255,255)
-			gr.rectangle("fill",x_axis,y_axis,3,3)
-			next_distance=ass*1.1
-		end
-		if axis_count==0 then
-			gr.print("No axes :(",asx,asy)
-		end
-		-- Show buttons info:
-		gr.setLineWidth(3)
-		gr.print("Buttons: ",asx,asy+ass*1.2)
-		local button_count=current_joy:getButtonCount()
-		next_distance=ass/2
+		gr.print("Name: "..joysticks[joy_index]:getName(),10,10)
+		gr.print("GUID: "..joysticks[joy_index]:getGUID(),10,30)
+		gr.print("Axis: "..joysticks[joy_index]:getAxisCount(),10,50)
+		gr.print("Button: "..joysticks[joy_index]:getButtonCount(),10,70)
+		gr.print("Hat: "..joysticks[joy_index]:getHatCount(),10,90)
 
-		for i=1,button_count do
-			--print(current_joy:getID())
-			table.insert(buttons,false)
-			gr.setColor(0,0,0)
-			if current_joy:isDown(i) then
-				buttons[i]=true-- Mark the button as "ok".
-				gr.setColor(255,255,255)
-			end
-			gr.circle("line",next_distance,asy+ass*1.7,ass/4)
-			if buttons[i] then gr.setColor(0,255,0) end
-			gr.setColor(255,255,255)
-			gr.print(i-1,next_distance-main_font:getWidth(""..i-1)/2,asy+ass*1.7-main_font:getHeight()/2)
-			next_distance=next_distance+ass*.55
-		end
+		drawAxis(100,100)
+		drawButton(20, 100)
 
-		for k,v in ipairs(gamepadKey) do
-			--print(current_joy:getID())
-			table.insert(buttons,false)
-			gr.setColor(0,0,0)
-			if current_joy:isGamepadDown(v) then
-				buttons[v]=true-- Mark the button as "ok".
-				gr.setColor(255,255,255)
-			end
-			gr.circle("line", 25, 225 + (k-1) * 30, ass/4)
-			gr.setColor(255,255,255)
-			if buttons[v] then gr.setColor(0,255,0) end
-			gr.print(
-				v,
-				25 +20,
-				225 + (k-1) * 30 - 8
-			)
-			gr.setColor(255,255,255)
-			next_distance=next_distance+ass*.55
-		end
-
-		buttons = {}
-
-		if button_count==0 then
-			gr.print("No buttons :(")
-		end
-
-		gr.setColor(255,255,255)
-		next_distance=0
-		for k,v in ipairs(gamepadAxis) do
-			local axis = current_joy:getGamepadAxis(v)
-			gr.setColor(255,255,255)
-			love.graphics.print(v..": "..math.floor(axis*100),350 +  15, 250 + (k-1) * 45 + 12)
-			gr.setColor(0,255,0)
-			love.graphics.rectangle("fill", 350 + 150 + 100, 250 + (k-1) * 45, axis*100, 40)
-			gr.setColor(0,0,0)
-			love.graphics.rectangle("line", 350 + 150, 250 + (k-1) * 45, 200, 40)
-			-- -- Axis:
-			-- gr.setColor(0,127,0)
-			-- -- Vertical line:
-			-- gr.line(x_axis+2,asy+2,x_axis+2,asy+ass-3)
-			-- -- Horizontal:
-			-- gr.line(asx+next_distance+2,y_axis+2,asx+next_distance+ass-3,y_axis+2)
-			-- gr.setColor(255,255,255)
-			-- gr.rectangle("fill",x_axis,y_axis,3,3)
-			next_distance=ass*1.1
-		end
+		drawGamepad(1280-600 + 10, 35)
+		drawGamepadInput(900, 400)
 	else
 		gr.print("No joysticks were found :(",10,10)
 		buttons={}
 	end
-	drawGamepad(1280-600 + 10, 35)
 end
 
 function drawGamepad(x,y)
@@ -258,11 +171,144 @@ function drawGamepad(x,y)
 		gr.setColor(255,255,255)
 	end
 	gr.draw(gamepadText.RB, x + 423, y + -50)
-
 end
+
+function drawGamepadInput(x,y)
+
+
+	gr.setColor(200,200,200)
+	gr.rectangle("fill", x + 8, y, 150, 50)
+	gr.setColor(0,0,0)
+	gr.rectangle("line", x + 8, y, 150, 50)
+	if current_joy:isGamepadDown("a") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	gr.draw(gamepadText.A, x + 10, y, 0, 0.5, 0.5)
+	local inputtype, inputindex, hatdirection = current_joy:getGamepadMapping("a")
+	gr.setColor(50,50,50)
+	gr.print(inputindex and ("Button_"..inputindex) or "None", x + 65, y + 16)
+
+	gr.setColor(200,200,200)
+	gr.rectangle("fill", x + 8, y + 50, 150, 50)
+	gr.setColor(0,0,0)
+	gr.rectangle("line", x + 8, y + 50, 150, 50)
+	if current_joy:isGamepadDown("b") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	gr.draw(gamepadText.B, x + 10, y + 50, 0, 0.5, 0.5)
+	local inputtype, inputindex, hatdirection = current_joy:getGamepadMapping("b")
+	gr.setColor(50,50,50)
+	gr.print(inputindex and ("Button_"..inputindex) or "None", x + 65, y + 50 + 16)
+
+	gr.setColor(200,200,200)
+	gr.rectangle("fill", x + 8, y + 100, 150, 50)
+	gr.setColor(0,0,0)
+	gr.rectangle("line", x + 8, y + 100, 150, 50)
+	if current_joy:isGamepadDown("x") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	gr.draw(gamepadText.X, x + 10, y + 100, 0, 0.5, 0.5)
+	local inputtype, inputindex, hatdirection = current_joy:getGamepadMapping("x")
+	gr.setColor(50,50,50)
+	gr.print(inputindex and ("Button_"..inputindex) or "None", x + 65, y + 100 + 16)
+
+	gr.setColor(200,200,200)
+	gr.rectangle("fill", x + 8, y + 150, 150, 50)
+	gr.setColor(0,0,0)
+	gr.rectangle("line", x + 8, y + 150, 150, 50)
+	if current_joy:isGamepadDown("y") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	gr.draw(gamepadText.Y, x + 10, y + 150, 0, 0.5, 0.5)
+	local inputtype, inputindex, hatdirection = current_joy:getGamepadMapping("y")
+	gr.setColor(50,50,50)
+	gr.print(inputindex and ("Button_"..inputindex) or "None", x + 65, y + 150 + 16)
+
+	gr.setColor(200,200,200)
+	gr.rectangle("fill", x + 8, y + 200, 150, 50)
+	gr.setColor(0,0,0)
+	gr.rectangle("line", x + 8, y + 200, 150, 50)
+	if current_joy:isGamepadDown("back") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	gr.draw(gamepadText.Back, x + 10, y + 200, 0, 0.5, 0.5)
+	local inputtype, inputindex, hatdirection = current_joy:getGamepadMapping("back")
+	gr.setColor(50,50,50)
+	gr.print(inputindex and ("Button_"..inputindex) or "None", x + 65, y + 200 + 16)
+
+	gr.setColor(200,200,200)
+	gr.rectangle("fill", x + 8, y + 250, 150, 50)
+	gr.setColor(0,0,0)
+	gr.rectangle("line", x + 8, y + 250, 150, 50)
+	if current_joy:isGamepadDown("start") then
+		gr.setColor(100,100,100)
+	else
+		gr.setColor(255,255,255)
+	end
+	gr.draw(gamepadText.Start, x + 10, y + 250, 0, 0.5, 0.5)
+	local inputtype, inputindex, hatdirection = current_joy:getGamepadMapping("start")
+	gr.setColor(50,50,50)
+	gr.print(inputindex and ("Button_"..inputindex) or "None", x + 65, y + 250 + 16)
+end
+
+function drawAxis(x, y)
+	local axis_count=current_joy:getAxisCount()
+	if axis_count == 0 then
+		gr.print("No axes :(", x, y)
+	else
+		for i=1, axis_count do
+
+			gr.setColor(255,255,255)
+			gr.print(i-1, x, i * 20 + y)
+
+			gr.setColor((current_joy:getAxis(i)*255), 255 - math.abs(current_joy:getAxis(i)*255), -(current_joy:getAxis(i)*255))
+			gr.rectangle("fill", x + 60, i * 20 + y, (current_joy:getAxis(i)*25), 18)
+
+			gr.setColor(255,255,255)
+			gr.print(math.floor(current_joy:getAxis(i) * 100), x + 100, i * 20 + y)
+			gr.rectangle("line", x + 35, i * 20 + y, 50, 18)
+		end
+	end
+end
+
+function drawButton(x, y)
+	gr.setLineWidth(1)
+	local button_count = current_joy:getButtonCount()
+
+	for i=1,button_count do
+		local isDown = current_joy:isDown(i)
+		-- gr.setColor(0,0,0)
+		gr.setColor(255,255,255)
+
+		if isDown then
+			gr.setColor(255,0,0)
+		else
+			gr.setColor(100,100,100)
+		end
+		gr.circle("fill", x, y + i * 28 + 4, 12)
+
+		gr.setColor(255,255,255)
+
+		gr.circle("line", x, y + i * 28 + 4, 12)
+		gr.print(i-1, x - main_font:getWidth(""..i-1)/2, y + i * 28 - 5)
+		-- next_distance=next_distance+ass*.55
+	end
+end
+
 
 function love.keypressed(key)
 	if key=="escape" then
 		love.event.quit()
 	end
+	-- print(love.joystick.saveGamepadMappings())
 end
