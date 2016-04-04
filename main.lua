@@ -280,69 +280,41 @@ function drawnSingleInput(x, y, img, input, rx, ry, color)
 	local inputtype, inputindex, hatdirection = current_joy:getGamepadMapping(input)
 	gr.setColor(50,50,50)
 	if inputtype == "button" then
-		gr.print(inputindex and ("Button_"..inputindex) or "None", x + 55, y + 16)
+		gr.print(inputindex and ("Button_"..inputindex-1), x + 55, y + 16)
 		if isButton(input) and current_joy:isGamepadDown(input) then
 			gr.setColor(100,100,100)
 		else
 			gr.setColor(255,255,255)
 		end
-		gr.draw(img, x, y, 0, rx, ry)
 	elseif inputtype == "axis" then
 		local axis_val = current_joy:getGamepadAxis(input)
-		if color then
-			gr.setColor(255 - math.abs(axis_val*200), 255 - math.abs(axis_val*200), 255 - math.abs(axis_val*200))
-		else
-			gr.setColor(255,255,255)
-		end
-		gr.draw(img, x, y, 0, rx, ry)
 		gr.setColor(50,50,50)
-		gr.print(inputindex and ("Axis_"..inputindex) or "None", x + 55, y + 16)
+		gr.print(inputindex and ("Axis_"..inputindex-1), x + 55, y + 16)
 
 		gr.setColor(axis_val * 255, 255 - math.abs(axis_val*255), -(axis_val * 255))
 		gr.rectangle("fill", x + 120, y + 5 - axis_val * 20 + 20, 20, 20 * axis_val)
 
 		gr.setColor(255,255,255)
 		gr.rectangle("line", x + 120, y + 5, 20, 40)
+		if color then
+			gr.setColor(255 - math.abs(axis_val*200), 255 - math.abs(axis_val*200), 255 - math.abs(axis_val*200))
+		else
+			gr.setColor(255,255,255)
+		end
 	elseif inputtype == "hat" then
+		gr.setColor(50,50,50)
+		gr.print(inputindex and ("Hat_"..(inputindex-1).."_"..hatdirection), x + 55, y + 16)
 		if current_joy:isGamepadDown(input) then
 			gr.setColor(100,100,100)
 		else
 			gr.setColor(255,255,255)
 		end
-		gr.draw(img, x, y, 0, rx, ry)
-		gr.setColor(50,50,50)
-		gr.print(inputindex and ("Hat_"..inputindex.."_"..hatdirection) or "None", x + 55, y + 16)
-	end
-
-end
-
-function drawnSingleAxis(x, y, img, axis, rx, ry, color)
-	gr.setColor(200,200,200)
-	gr.rectangle("fill", x, y, 145, 50)
-
-	gr.setColor(0,0,0)
-	gr.rectangle("line", x, y, 145, 50)
-
-	local axis_val = current_joy:getGamepadAxis(axis)
-
-
-
-	if color then
-		gr.setColor(255 - math.abs(axis_val*200), 255 - math.abs(axis_val*200), 255 - math.abs(axis_val*200))
 	else
+		gr.setColor(50,50,50)
+		gr.print("None", x + 55, y + 16)
 		gr.setColor(255,255,255)
 	end
 	gr.draw(img, x, y, 0, rx, ry)
-
-	local inputtype, inputindex, hatdirection = current_joy:getGamepadMapping(axis)
-	gr.setColor(50,50,50)
-	gr.print(inputindex and ("Axis_"..inputindex) or "None", x + 55, y + 16)
-
-	gr.setColor(axis_val * 255, 255 - math.abs(axis_val*255), -(axis_val * 255))
-	 gr.rectangle("fill", x + 120, y + 5 - axis_val * 20 + 20, 20, 20 * axis_val)
-
-	gr.setColor(255,255,255)
-	gr.rectangle("line", x + 120, y + 5, 20, 40)
 
 end
 
@@ -498,5 +470,15 @@ function love.keypressed(key)
 			i = i + 1
 		end
 		if tab[id + 1] then current_joy = tab[id + 1] end
+	end
+	if key == "r" then
+		-- love.joystick.loadGamepadMappings("test" )
+		-- local sucess = love.joystick.setGamepadMapping("030000004c0500006802000011010000", "a", "button", 1, nil )
+		-- local sucess = love.joystick.setGamepadMapping("030000004c0500006802000011010000", "b", "button", 2, nil )
+		-- local sucess = love.joystick.setGamepadMapping("030000004c0500006802000011010000", "x", "button", 3, nil )
+		-- local sucess = love.joystick.setGamepadMapping("030000004c0500006802000011010000", "y", "button", 4, nil )
+		-- print(love.joystick.saveGamepadMappings())
+		-- print("success",sucess	)
+
 	end
 end
