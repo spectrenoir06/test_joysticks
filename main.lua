@@ -43,6 +43,27 @@ function love.load()
 		"triggerright"
 	}
 
+
+	hatDir = {
+		"c",
+		"d",
+		"l",
+		"ld",
+		"lu",
+		"r",
+		"rd",
+		"ru",
+		"u"
+	}
+
+	hatDirRev = {
+		d = 4,
+		l = 8,
+		r = 2,
+		u = 1
+	}
+
+
 	win={w=gr.getWidth(),h=gr.getHeight()}-- Window.
 	--mo.setVisible(false)
 	main_font = gr.newFont(math.floor(15))
@@ -55,6 +76,86 @@ function love.load()
 	gr.setBackgroundColor(0,31,31)
 
 	joysticks = {}
+end
+
+function split(inputstr, sep)
+	if sep == nil then
+		sep = "%s"
+	end
+	local t={} ; i=1
+	for str in string.gmatch(inputstr, "([^"..sep.."]+)") do
+		t[i] = str
+		i = i + 1
+	end
+	return t
+end
+
+function keymapExtract(line)
+	local t = split(line, ",")
+	local guid = t[1]
+	local name = t[2]
+	-- for k, v in ipairs(t) do print(k,v) end
+	local data = {}
+	for i=3, #t-1 do
+		local key, value = string.match(t[i], '(.*):(.*)')
+		-- print(i, key, value)
+		data[key] = value
+	end
+	return guid, name, data
+end
+
+
+function keymapToTab(sguid)
+	local str = love.joystick.saveGamepadMappings()
+
+	if sguid then
+		for line in (str..'\n'):gmatch('(.-)\r?\n') do
+			local guid, name, data = keymapExtract(line)
+			-- print(sguid, guid, line)
+			if sguid == guid then
+				return guid, name, data
+			end
+		end
+		return nil
+	else
+		local ret = {}
+		for line in (str..'\n'):gmatch('(.-)\r?\n') do
+			local guid, name, data = keymapExtract(line)
+			table.insert(ret, {guid = guid, name = name, data = data})
+		end
+		return ret
+	end
+end
+
+function keymapClear(guid, name)
+	love.joystick.loadGamepadMappings(guid..","..name..",")
+end
+
+function keymapSetKey(guid, name, key, type, value, hatdir)
+	print(guid,name,key,type,value)
+	local guid, name, data = keymapToTab(guid)
+	-- print(data[key])
+
+	if type == "button" then
+		data[key] = "b"..value
+	elseif type == "hat" then
+		data[key] = "h"..value.."."..hatdir
+	elseif type == 'axis' then
+		data[key] = "a"..value
+	else
+		data[key] = nil
+	end
+	-- print(tabToKeymap(guid, name, data))
+
+	love.joystick.loadGamepadMappings(tabToKeymap(guid, name, data))
+end
+
+function tabToKeymap(guid, name, data)
+	str = guid..","..name..","
+	for k, v in pairs(data) do
+		str = str..k..":"..v..","
+	end
+	return str
 end
 
 function isButton(key)
@@ -258,7 +359,7 @@ function drawGamepadInput(x,y)
 	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 50, gamepadText.Left_Stick_Y, "lefty", 0.5)
 
 	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 100, gamepadText.Right_Stick_X, "rightx", 0.5)
-	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 150, gamepadText.Left_Stick_Y, "righty", 0.5)
+	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 150, gamepadText.Right_Stick_Y, "righty", 0.5)
 
 	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 200, gamepadText.LT, "triggerleft", 0.5, 0.5, true)
 	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 250, gamepadText.RT, "triggerright", 0.5, 0.5, true)
@@ -267,7 +368,6 @@ function drawGamepadInput(x,y)
 	drawnSingleInput(x+ 1 + 145 * 3, y + 1 + 50 * 1, gamepadText.Dpad_Down, "dpdown", 0.5)
 	drawnSingleInput(x+ 1 + 145 * 3, y + 1 + 50 * 2, gamepadText.Dpad_Left, "dpleft", 0.5)
 	drawnSingleInput(x+ 1 + 145 * 3, y + 1 + 50 * 3, gamepadText.Dpad_Right, "dpright", 0.5)
-
 end
 
 function drawnSingleInput(x, y, img, input, rx, ry, color)
@@ -315,7 +415,6 @@ function drawnSingleInput(x, y, img, input, rx, ry, color)
 		gr.setColor(255,255,255)
 	end
 	gr.draw(img, x, y, 0, rx, ry)
-
 end
 
 function drawAxis(x, y)
@@ -471,14 +570,121 @@ function love.keypressed(key)
 		end
 		if tab[id + 1] then current_joy = tab[id + 1] end
 	end
-	if key == "r" then
-		-- love.joystick.loadGamepadMappings("test" )
-		-- local sucess = love.joystick.setGamepadMapping("030000004c0500006802000011010000", "a", "button", 1, nil )
-		-- local sucess = love.joystick.setGamepadMapping("030000004c0500006802000011010000", "b", "button", 2, nil )
-		-- local sucess = love.joystick.setGamepadMapping("030000004c0500006802000011010000", "x", "button", 3, nil )
-		-- local sucess = love.joystick.setGamepadMapping("030000004c0500006802000011010000", "y", "button", 4, nil )
-		-- print(love.joystick.saveGamepadMappings())
-		-- print("success",sucess	)
+	-- if key == "r" then
+	-- 	modif = 'a'
+	-- 	modif_type = 'button'
+	-- 	-- love.joystick.loadGamepadMappings("test")
+	-- 	local guid, name, tab = keymapToTab(current_joy:getGUID())
+	-- 	-- keymapSetKey(guid, name, "leftx", "button", 1, nil)
+	-- 	-- keymapSetKey(guid, name, "dpup", "hat", 0, 1)
+	-- 	-- keymapSetKey(guid, name, "leftx", "axis", 0, nil)
+	-- 	save = saveAxis(current_joy)
+	--
+	-- 	print(love.joystick.saveGamepadMappings())
+	-- end
 
+	if key == 'i' then
+		print(love.joystick.saveGamepadMappings())
+	end
+
+end
+
+
+function saveAxis(joy)
+	t = {}
+	for i=1, joy:getAxisCount() do
+		t[i] = joy:getAxis(i)
+	end
+	return t
+end
+
+function findModifAxis(joy, save)
+	local abs = math.abs
+	for i=1, joy:getAxisCount() do
+		-- print(abs(save[i] - joy:getAxis(i)))
+		if abs(save[i] - joy:getAxis(i)) > 0.30 then
+			return i
+		end
+	end
+	return nil
+end
+
+function love.joystickpressed( joystick, button )
+	if modif and joystick == current_joy then
+		local guid, name, tab = keymapToTab(current_joy:getGUID())
+		keymapSetKey(guid, name, modif, "button", button-1, nil)
+		modif = false
+	end
+end
+
+function love.joystickaxis( joystick, axis, value )
+	if modif and modif_type == 'axis' and joystick == current_joy then
+		local guid, name, tab = keymapToTab(current_joy:getGUID())
+		local a = findModifAxis(current_joy, save)
+		if a then
+			keymapSetKey(guid, name, modif, "axis", a-1, nil)
+			modif = false
+		end
+	end
+end
+
+function love.joystickhat( joystick, hat, direction )
+	if modif and joystick == current_joy then
+		local guid, name, tab = keymapToTab(current_joy:getGUID())
+		keymapSetKey(guid, name, modif, "hat", hat-1, hatDirRev[direction])
+		modif = false
+	end
+end
+
+function love.mousepressed(x, y, button, isTouch)
+
+	local px, py = 520, 400
+
+	print(x,y)
+
+	mouseSingleInput(x, y, px+1, py + 1, "a")
+	mouseSingleInput(x, y, px+1, py + 1 + 50, "b")
+	mouseSingleInput(x, y, px+1, py + 1 + 100, "x")
+	mouseSingleInput(x, y, px+1, py + 1 + 150, "y")
+	mouseSingleInput(x, y, px+1, py + 1 + 200, "start")
+	mouseSingleInput(x, y, px+1, py + 1 + 250, "back")
+
+	mouseSingleInput(x, y, px+ 1 + 145, py + 1, "guide")
+	mouseSingleInput(x, y, px+ 1 + 145, py + 1 + 50, "leftstick")
+	mouseSingleInput(x, y, px+ 1 + 145, py + 1 + 100, "rightstick")
+
+	mouseSingleInput(x, y, px+ 1 + 145, py + 1 + 150, "leftshoulder")
+	mouseSingleInput(x, y, px+ 1 + 145, py + 1 + 200, "rightshoulder")
+
+
+	mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 0, "leftx")
+	mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 50, "lefty")
+
+	mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 100, "rightx")
+	mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 150, "righty")
+
+	mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 200, "triggerleft")
+	mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 250, "triggerright")
+
+	mouseSingleInput(x, y, px+ 1 + 145 * 3, py + 1 + 50 * 0, "dpup")
+	mouseSingleInput(x, y, px+ 1 + 145 * 3, py + 1 + 50 * 1, "dpdown")
+	mouseSingleInput(x, y, px+ 1 + 145 * 3, py + 1 + 50 * 2, "dpleft")
+	mouseSingleInput(x, y, px+ 1 + 145 * 3, py + 1 + 50 * 3, "dpright")
+end
+
+function mouseSingleInput(mouseX, mouseY, x, y, key)
+	if	mouseX >= x
+		and mouseX <= x + 145
+		and mouseY >= y
+		and mouseY <= y + 50
+	then
+		print(key)
+		modif = key
+		if isButton(key) then
+			modif_type = "button"
+		else
+			modif_type = "axis"
+			save = saveAxis(current_joy)
+		end
 	end
 end
