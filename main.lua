@@ -202,6 +202,45 @@ function love.draw()
 		drawGamepad(500 + 20, 10)
 		drawGamepadInput(520, 400)
 	end
+
+	if modif then
+		drawPopup(0,0)
+	end
+end
+
+function drawPopup()
+	gr.setColor(0,0,0,230)
+	gr.rectangle("fill",0,0,win.w,win.h)
+	gr.setColor(255,255,255,255)
+	local x = win.w / 2 - 600/2
+	local y = win.h / 2 - 150/2
+	gr.setColor(200,200,200)
+	gr.rectangle("fill", x, y, 600, 150)
+
+	gr.setColor(0,0,0,255)
+	gr.rectangle("line", x, y, 600, 150)
+	gr.setColor(50,50,50)
+	if modif_type == "button" then
+		love.graphics.print("Press the button          of your gamepad.", x + 20, y + 20)
+		gr.setColor(255,255,255)
+		drawIcone(x + 142, y + 4, modif)
+	elseif modif_type == "axis" then
+		love.graphics.print("Press the axis          of your gamepad.", x + 20, y + 20)
+		gr.setColor(255,255,255)
+		drawIcone(x + 125, y + 4, modif)
+	end
+	gr.setColor(50,50,50)
+	love.graphics.print(modif_type, x + 20, y + 40)
+end
+
+function drawIcone(x,y, name)
+	if gamepadText[name] then
+		if name == 'guide' then
+			love.graphics.draw(gamepadText[name], x, y, nil, 0.78, 0.78)
+		else
+			love.graphics.draw(gamepadText[name], x, y, nil , 0.5, 0.5)
+		end
+	end
 end
 
 function drawGamepad(x,y)
@@ -219,28 +258,28 @@ function drawGamepad(x,y)
 	else
 		gr.setColor(255,255,255)
 	end
-	gr.draw(gamepadText.A, x + 440, y + 147, 0, 0.5, 0.5)
+	gr.draw(gamepadText.a, x + 440, y + 147, 0, 0.5, 0.5)
 
 	if current_joy:isGamepadDown("b") then
 		gr.setColor(100,100,100)
 	else
 		gr.setColor(255,255,255)
 	end
-	gr.draw(gamepadText.B, x + 484, y + 103, 0, 0.5, 0.5)
+	gr.draw(gamepadText.b, x + 484, y + 103, 0, 0.5, 0.5)
 
 	if current_joy:isGamepadDown("y") then
 		gr.setColor(100,100,100)
 	else
 		gr.setColor(255,255,255)
 	end
-	gr.draw(gamepadText.Y, x + 440, y + 59, 0, 0.5, 0.5)
+	gr.draw(gamepadText.y, x + 440, y + 59, 0, 0.5, 0.5)
 
 	if current_joy:isGamepadDown("x") then
 		gr.setColor(100,100,100)
 	else
 		gr.setColor(255,255,255)
 	end
-	gr.draw(gamepadText.X, x + 396, y + 103, 0, 0.5, 0.5)
+	gr.draw(gamepadText.x, x + 396, y + 103, 0, 0.5, 0.5)
 
 	if current_joy:isGamepadDown("leftstick") then
 		gr.setColor(100,100,100)
@@ -250,7 +289,7 @@ function drawGamepad(x,y)
 	local axis_x = current_joy:getGamepadAxis("leftx")
 	local axis_y = current_joy:getGamepadAxis("lefty")
 
-	gr.draw(gamepadText.Left_Stick, x + 81 + axis_x * 12, y + 77 + axis_y * 12)
+	gr.draw(gamepadText.leftstick, x + 81 + axis_x * 12, y + 77 + axis_y * 12)
 
 	if current_joy:isGamepadDown("rightstick") then
 		gr.setColor(100,100,100)
@@ -259,15 +298,15 @@ function drawGamepad(x,y)
 	end
 	local axis_x = current_joy:getGamepadAxis("rightx")
 	local axis_y = current_joy:getGamepadAxis("righty")
-	gr.draw(gamepadText.Right_Stick, x + 330 + axis_x * 12, y + 179 + axis_y * 12)
+	gr.draw(gamepadText.rightstick, x + 330 + axis_x * 12, y + 179 + axis_y * 12)
 
 	gr.setColor(255,255,255)
 	gr.draw(gamepadText.Dpad, x + 164, y + 177)
 	love.graphics.setBlendMode("lighten","premultiplied")
-	if current_joy:isGamepadDown("dpdown") then gr.draw(gamepadText.Dpad_Down, x + 164, y + 177) end
-	if current_joy:isGamepadDown("dpup") then gr.draw(gamepadText.Dpad_Up, x + 164, y + 177) end
-	if current_joy:isGamepadDown("dpleft") then gr.draw(gamepadText.Dpad_Left, x + 164, y + 177) end
-	if current_joy:isGamepadDown("dpright") then gr.draw(gamepadText.Dpad_Right, x + 164, y + 177) end
+	if current_joy:isGamepadDown("dpdown") then gr.draw(gamepadText.dpdown, x + 164, y + 177) end
+	if current_joy:isGamepadDown("dpup") then gr.draw(gamepadText.dpup, x + 164, y + 177) end
+	if current_joy:isGamepadDown("dpleft") then gr.draw(gamepadText.dpleft, x + 164, y + 177) end
+	if current_joy:isGamepadDown("dpright") then gr.draw(gamepadText.dpright, x + 164, y + 177) end
 	love.graphics.setBlendMode("alpha")
 
 	if current_joy:isGamepadDown("back") then
@@ -275,14 +314,14 @@ function drawGamepad(x,y)
 	else
 		gr.setColor(255,255,255)
 	end
-	gr.draw(gamepadText.Back, x + 213, y + 111, 0, 0.5, 0.5)
+	gr.draw(gamepadText.back, x + 213, y + 111, 0, 0.5, 0.5)
 
 	if current_joy:isGamepadDown("start") then
 		gr.setColor(100,100,100)
 	else
 		gr.setColor(255,255,255)
 	end
-	gr.draw(gamepadText.Start, x + 337, y + 111, 0, 0.5, 0.5)
+	gr.draw(gamepadText.start, x + 337, y + 111, 0, 0.5, 0.5)
 
 
 	if current_joy:isGamepadDown("guide") then
@@ -290,21 +329,21 @@ function drawGamepad(x,y)
 	else
 		gr.setColor(255,255,255)
 	end
-	gr.draw(gamepadText.Guide, x + 270, y + 101)
+	gr.draw(gamepadText.guide, x + 270, y + 101)
 
 	if current_joy:isGamepadDown("leftshoulder") then
 		gr.setColor(100,100,100)
 	else
 		gr.setColor(255,255,255)
 	end
-	gr.draw(gamepadText.LB, x + 545 + 22, y - 5)
+	gr.draw(gamepadText.leftshoulder, x + 545 + 22, y - 5)
 
 	if current_joy:isGamepadDown("rightshoulder") then
 		gr.setColor(100,100,100)
 	else
 		gr.setColor(255,255,255)
 	end
-	gr.draw(gamepadText.RB, x + 645 + 22, y - 5)
+	gr.draw(gamepadText.rightshoulder, x + 645 + 22, y - 5)
 
 	gr.setColor(255,255,255)
 
@@ -312,7 +351,7 @@ function drawGamepad(x,y)
 	local axis_r = current_joy:getGamepadAxis("triggerright")
 
 	gr.setColor(255 - math.abs(axis_l*200), 255 - math.abs(axis_l*200), 255 - math.abs(axis_l*200))
-	gr.draw(gamepadText.LT, x + 22 + 550, y + 70)
+	gr.draw(gamepadText.triggerleft, x + 22 + 550, y + 70)
 
 	gr.setColor(axis_l * 255, 255 - math.abs(axis_l*255), -(axis_l * 255))
 	gr.rectangle("fill", x + 22 + 600, y + 170 - 75 * axis_l + 75, 30, 75 * axis_l)
@@ -324,7 +363,7 @@ function drawGamepad(x,y)
 	gr.print(val, x + 22 + 635 - main_font:getWidth(val), y + 250)
 
 	gr.setColor(255 - math.abs(axis_r*200), 255 - math.abs(axis_r*200), 255 - math.abs(axis_r*200))
-	gr.draw(gamepadText.RT, x + 22 + 650, y + 70)
+	gr.draw(gamepadText.triggerright, x + 22 + 650, y + 70)
 
 	gr.setColor(axis_r * 255, 255 - math.abs(axis_r*255), -(axis_r * 255))
 	gr.rectangle("fill", x + 22 + 670, y + 170 - 75 * axis_r + 75, 30, 75 * axis_r)
@@ -340,34 +379,34 @@ function drawGamepadInput(x,y)
 
 	gr.rectangle("line", x, y, 582, 302)
 
-	drawnSingleInput(x+1, y+1, gamepadText.A, "a", 0.5)
-	drawnSingleInput(x+1, y + 1 + 50, gamepadText.B, "b", 0.5)
-	drawnSingleInput(x+1, y + 1 + 100, gamepadText.X, "x", 0.5)
-	drawnSingleInput(x+1, y + 1 + 150, gamepadText.Y, "y", 0.5)
-	drawnSingleInput(x+1, y + 1 + 200, gamepadText.Start, "start", 0.5)
-	drawnSingleInput(x+1, y + 1 + 250, gamepadText.Back, "back", 0.5)
+	drawnSingleInput(x+1, y+1, gamepadText.a, "a", 0.5)
+	drawnSingleInput(x+1, y + 1 + 50, gamepadText.b, "b", 0.5)
+	drawnSingleInput(x+1, y + 1 + 100, gamepadText.x, "x", 0.5)
+	drawnSingleInput(x+1, y + 1 + 150, gamepadText.y, "y", 0.5)
+	drawnSingleInput(x+1, y + 1 + 200, gamepadText.start, "start", 0.5)
+	drawnSingleInput(x+1, y + 1 + 250, gamepadText.back, "back", 0.5)
 
-	drawnSingleInput(x+ 1 + 145, y + 1, gamepadText.Guide, "guide", 0.78)
-	drawnSingleInput(x+ 1 + 145, y + 1 + 50, gamepadText.Left_Stick, "leftstick", 0.5)
-	drawnSingleInput(x+ 1 + 145, y + 1 + 100, gamepadText.Right_Stick, "rightstick", 0.5)
+	drawnSingleInput(x+ 1 + 145, y + 1, gamepadText.guide, "guide", 0.78)
+	drawnSingleInput(x+ 1 + 145, y + 1 + 50, gamepadText.leftstick, "leftstick", 0.5)
+	drawnSingleInput(x+ 1 + 145, y + 1 + 100, gamepadText.rightstick, "rightstick", 0.5)
 
-	drawnSingleInput(x+ 1 + 145, y + 1 + 150, gamepadText.LB, "leftshoulder", 0.5)
-	drawnSingleInput(x+ 1 + 145, y + 1 + 200, gamepadText.RB, "rightshoulder", 0.5)
+	drawnSingleInput(x+ 1 + 145, y + 1 + 150, gamepadText.leftshoulder, "leftshoulder", 0.5)
+	drawnSingleInput(x+ 1 + 145, y + 1 + 200, gamepadText.rightshoulder, "rightshoulder", 0.5)
 
 
-	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 0, gamepadText.Left_Stick_X, "leftx", 0.5)
-	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 50, gamepadText.Left_Stick_Y, "lefty", 0.5)
+	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 0, gamepadText.leftx, "leftx", 0.5)
+	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 50, gamepadText.lefty, "lefty", 0.5)
 
-	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 100, gamepadText.Right_Stick_X, "rightx", 0.5)
-	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 150, gamepadText.Right_Stick_Y, "righty", 0.5)
+	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 100, gamepadText.rightx, "rightx", 0.5)
+	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 150, gamepadText.righty, "righty", 0.5)
 
-	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 200, gamepadText.LT, "triggerleft", 0.5, 0.5, true)
-	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 250, gamepadText.RT, "triggerright", 0.5, 0.5, true)
+	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 200, gamepadText.triggerleft, "triggerleft", 0.5, 0.5, true)
+	drawnSingleInput(x+ 1 + 145 * 2, y + 1 + 250, gamepadText.triggerright, "triggerright", 0.5, 0.5, true)
 
-	drawnSingleInput(x+ 1 + 145 * 3, y + 1 + 50 * 0, gamepadText.Dpad_Up, "dpup", 0.5)
-	drawnSingleInput(x+ 1 + 145 * 3, y + 1 + 50 * 1, gamepadText.Dpad_Down, "dpdown", 0.5)
-	drawnSingleInput(x+ 1 + 145 * 3, y + 1 + 50 * 2, gamepadText.Dpad_Left, "dpleft", 0.5)
-	drawnSingleInput(x+ 1 + 145 * 3, y + 1 + 50 * 3, gamepadText.Dpad_Right, "dpright", 0.5)
+	drawnSingleInput(x+ 1 + 145 * 3, y + 1 + 50 * 0, gamepadText.dpup, "dpup", 0.5)
+	drawnSingleInput(x+ 1 + 145 * 3, y + 1 + 50 * 1, gamepadText.dpdown, "dpdown", 0.5)
+	drawnSingleInput(x+ 1 + 145 * 3, y + 1 + 50 * 2, gamepadText.dpleft, "dpleft", 0.5)
+	drawnSingleInput(x+ 1 + 145 * 3, y + 1 + 50 * 3, gamepadText.dpright, "dpright", 0.5)
 end
 
 function drawnSingleInput(x, y, img, input, rx, ry, color)
@@ -502,10 +541,10 @@ function drawHat(x, y)
 
 		gr.draw(gamepadText.Dpad, px, py, 0, 0.5)
 		gr.setBlendMode("lighten","premultiplied")
-		if d=="d" or d=="ld" or d=="rd" then gr.draw(gamepadText.Dpad_Down, px, py, 0, 0.5) end
-		if d=="u" or d=="lu" or d=="ru" then gr.draw(gamepadText.Dpad_Up, px, py, 0, 0.5) end
-		if d=="l" or d=="ld" or d=="lu" then gr.draw(gamepadText.Dpad_Left, px, py, 0, 0.5) end
-		if d=="r" or d=="rd" or d=="ru" then gr.draw(gamepadText.Dpad_Right, px, py, 0, 0.5) end
+		if d=="d" or d=="ld" or d=="rd" then gr.draw(gamepadText.dpdown, px, py, 0, 0.5) end
+		if d=="u" or d=="lu" or d=="ru" then gr.draw(gamepadText.dpdown, px, py, 0, 0.5) end
+		if d=="l" or d=="ld" or d=="lu" then gr.draw(gamepadText.dpleft, px, py, 0, 0.5) end
+		if d=="r" or d=="rd" or d=="ru" then gr.draw(gamepadText.dpright, px, py, 0, 0.5) end
 		gr.setBlendMode("alpha")
 		local lx, ly = gamepadText.Dpad:getWidth()/2, gamepadText.Dpad:getHeight()/2
 		gr.print(i-1, px + lx/2 - main_font:getWidth(""..i-1)/2, py + ly/2 - main_font:getHeight(""..i-1)/2)
@@ -642,34 +681,36 @@ function love.mousepressed(x, y, button, isTouch)
 
 	print(x,y)
 
-	mouseSingleInput(x, y, px+1, py + 1, "a")
-	mouseSingleInput(x, y, px+1, py + 1 + 50, "b")
-	mouseSingleInput(x, y, px+1, py + 1 + 100, "x")
-	mouseSingleInput(x, y, px+1, py + 1 + 150, "y")
-	mouseSingleInput(x, y, px+1, py + 1 + 200, "start")
-	mouseSingleInput(x, y, px+1, py + 1 + 250, "back")
+	if not modif then
+		mouseSingleInput(x, y, px+1, py + 1, "a")
+		mouseSingleInput(x, y, px+1, py + 1 + 50, "b")
+		mouseSingleInput(x, y, px+1, py + 1 + 100, "x")
+		mouseSingleInput(x, y, px+1, py + 1 + 150, "y")
+		mouseSingleInput(x, y, px+1, py + 1 + 200, "start")
+		mouseSingleInput(x, y, px+1, py + 1 + 250, "back")
 
-	mouseSingleInput(x, y, px+ 1 + 145, py + 1, "guide")
-	mouseSingleInput(x, y, px+ 1 + 145, py + 1 + 50, "leftstick")
-	mouseSingleInput(x, y, px+ 1 + 145, py + 1 + 100, "rightstick")
+		mouseSingleInput(x, y, px+ 1 + 145, py + 1, "guide")
+		mouseSingleInput(x, y, px+ 1 + 145, py + 1 + 50, "leftstick")
+		mouseSingleInput(x, y, px+ 1 + 145, py + 1 + 100, "rightstick")
 
-	mouseSingleInput(x, y, px+ 1 + 145, py + 1 + 150, "leftshoulder")
-	mouseSingleInput(x, y, px+ 1 + 145, py + 1 + 200, "rightshoulder")
+		mouseSingleInput(x, y, px+ 1 + 145, py + 1 + 150, "leftshoulder")
+		mouseSingleInput(x, y, px+ 1 + 145, py + 1 + 200, "rightshoulder")
 
 
-	mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 0, "leftx")
-	mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 50, "lefty")
+		mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 0, "leftx")
+		mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 50, "lefty")
 
-	mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 100, "rightx")
-	mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 150, "righty")
+		mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 100, "rightx")
+		mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 150, "righty")
 
-	mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 200, "triggerleft")
-	mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 250, "triggerright")
+		mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 200, "triggerleft")
+		mouseSingleInput(x, y, px+ 1 + 145 * 2, py + 1 + 250, "triggerright")
 
-	mouseSingleInput(x, y, px+ 1 + 145 * 3, py + 1 + 50 * 0, "dpup")
-	mouseSingleInput(x, y, px+ 1 + 145 * 3, py + 1 + 50 * 1, "dpdown")
-	mouseSingleInput(x, y, px+ 1 + 145 * 3, py + 1 + 50 * 2, "dpleft")
-	mouseSingleInput(x, y, px+ 1 + 145 * 3, py + 1 + 50 * 3, "dpright")
+		mouseSingleInput(x, y, px+ 1 + 145 * 3, py + 1 + 50 * 0, "dpup")
+		mouseSingleInput(x, y, px+ 1 + 145 * 3, py + 1 + 50 * 1, "dpdown")
+		mouseSingleInput(x, y, px+ 1 + 145 * 3, py + 1 + 50 * 2, "dpleft")
+		mouseSingleInput(x, y, px+ 1 + 145 * 3, py + 1 + 50 * 3, "dpright")
+	end
 end
 
 function mouseSingleInput(mouseX, mouseY, x, y, key)
