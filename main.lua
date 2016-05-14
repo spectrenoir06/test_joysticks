@@ -132,9 +132,12 @@ function keymapClear(guid, name)
 end
 
 function keymapSetKey(guid, name, key, type, value, hatdir)
-	print(guid,name,key,type,value)
+	print("keymapSetKey",guid,name,key,type,value)
 	local guid, name, data = keymapToTab(guid)
 	-- print(data[key])
+
+	if key == "triggerleft" then key = "lefttrigger" end
+	if key == "triggerright" then key = "righttrigger" end
 
 	if type == "button" then
 		data[key] = "b"..value
@@ -145,7 +148,9 @@ function keymapSetKey(guid, name, key, type, value, hatdir)
 	else
 		data[key] = nil
 	end
-	-- print(tabToKeymap(guid, name, data))
+
+	print(data[key])
+	print(tabToKeymap(guid, name, data))
 
 	love.joystick.loadGamepadMappings(tabToKeymap(guid, name, data))
 end
@@ -443,7 +448,7 @@ function drawnSingleInput(x, y, img, input, rx, ry, color)
 	elseif inputtype == "hat" then
 		gr.setColor(50,50,50)
 		gr.print(inputindex and ("Hat_"..(inputindex-1).."_"..hatdirection), x + 55, y + 16)
-		if current_joy:isGamepadDown(input) then
+		if isButton(input) and current_joy:isGamepadDown(input) then
 			gr.setColor(100,100,100)
 		else
 			gr.setColor(255,255,255)
