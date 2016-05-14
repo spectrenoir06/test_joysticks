@@ -425,7 +425,7 @@ function drawnSingleInput(x, y, img, input, rx, ry, color)
 	gr.setColor(50,50,50)
 	if inputtype == "button" then
 		gr.print(inputindex and ("Button_"..inputindex-1), x + 55, y + 16)
-		if isButton(input) and current_joy:isGamepadDown(input) then
+		if current_joy:isDown(inputindex) then
 			gr.setColor(100,100,100)
 		else
 			gr.setColor(255,255,255)
@@ -448,7 +448,7 @@ function drawnSingleInput(x, y, img, input, rx, ry, color)
 	elseif inputtype == "hat" then
 		gr.setColor(50,50,50)
 		gr.print(inputindex and ("Hat_"..(inputindex-1).."_"..hatdirection), x + 55, y + 16)
-		if isButton(input) and current_joy:isGamepadDown(input) then
+		if current_joy:getHat(inputindex) == hatdirection then
 			gr.setColor(100,100,100)
 		else
 			gr.setColor(255,255,255)
@@ -547,7 +547,7 @@ function drawHat(x, y)
 		gr.draw(gamepadText.Dpad, px, py, 0, 0.5)
 		gr.setBlendMode("lighten","premultiplied")
 		if d=="d" or d=="ld" or d=="rd" then gr.draw(gamepadText.dpdown, px, py, 0, 0.5) end
-		if d=="u" or d=="lu" or d=="ru" then gr.draw(gamepadText.dpdown, px, py, 0, 0.5) end
+		if d=="u" or d=="lu" or d=="ru" then gr.draw(gamepadText.dpup, px, py, 0, 0.5) end
 		if d=="l" or d=="ld" or d=="lu" then gr.draw(gamepadText.dpleft, px, py, 0, 0.5) end
 		if d=="r" or d=="rd" or d=="ru" then gr.draw(gamepadText.dpright, px, py, 0, 0.5) end
 		gr.setBlendMode("alpha")
