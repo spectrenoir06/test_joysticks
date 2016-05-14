@@ -378,6 +378,20 @@ function drawGamepad(x,y)
 
 	local val = math.floor(axis_r * 100).."%"
 	gr.print(val, x + 22 + 700 - main_font:getWidth(val), y + 250)
+
+	if current_joy:isVibrationSupported() then
+		gr.setColor(230,230,230)
+		gr.rectangle("fill", x + 600, y + 270, 145, 50)
+		gr.setColor(0,0,0)
+		gr.rectangle("line", x + 600, y + 270, 145, 50)
+		love.graphics.print( "Test Vibration 1", x + 610, y + 270 + 15)
+
+		gr.setColor(230,230,230)
+		gr.rectangle("fill", x + 600, y + 270 + 60, 145, 50)
+		gr.setColor(0,0,0)
+		gr.rectangle("line", x + 600, y + 270 + 60, 145, 50)
+		love.graphics.print( "Test Vibration 2", x + 610, y + 270 + 60 + 15)
+	end
 end
 
 function drawGamepadInput(x,y)
@@ -435,8 +449,14 @@ function drawnSingleInput(x, y, img, input, rx, ry, color)
 		gr.setColor(50,50,50)
 		gr.print(inputindex and ("Axis_"..inputindex-1), x + 55, y + 16)
 
-		gr.setColor(axis_val * 255, 255 - math.abs(axis_val*255), -(axis_val * 255))
-		gr.rectangle("fill", x + 120, y + 5 - axis_val * 20 + 20, 20, 20 * axis_val)
+		if input == 'triggerleft' or input == 'triggerright' then
+			gr.setColor(axis_val * 255, 255 - math.abs(axis_val*255), -(axis_val * 255))
+			gr.rectangle("fill", x + 120, y + 5 - (axis_val * 40) + 40, 20, 40 * axis_val)
+		else
+			gr.setColor(axis_val * 255, 255 - math.abs(axis_val*255), -(axis_val * 255))
+			gr.rectangle("fill", x + 120, y + 5 - axis_val * 20 + 20, 20, 20 * axis_val)
+		end
+
 
 		gr.setColor(255,255,255)
 		gr.rectangle("line", x + 120, y + 5, 20, 40)
@@ -614,6 +634,7 @@ function love.keypressed(key)
 		end
 		if tab[id + 1] then current_joy = tab[id + 1] end
 	end
+
 	-- if key == "r" then
 	-- 	modif = 'a'
 	-- 	modif_type = 'button'
@@ -626,6 +647,14 @@ function love.keypressed(key)
 	--
 	-- 	print(love.joystick.saveGamepadMappings())
 	-- end
+
+	if key == "r" then
+		current_joy:setVibration( 0, 1, 1)
+	end
+
+	if key == "t" then
+		current_joy:setVibration( 1, 0, 1 )
+	end
 
 	if key == 'i' then
 		print(love.joystick.saveGamepadMappings())
@@ -715,6 +744,15 @@ function love.mousepressed(x, y, button, isTouch)
 		mouseSingleInput(x, y, px+ 1 + 145 * 3, py + 1 + 50 * 1, "dpdown")
 		mouseSingleInput(x, y, px+ 1 + 145 * 3, py + 1 + 50 * 2, "dpleft")
 		mouseSingleInput(x, y, px+ 1 + 145 * 3, py + 1 + 50 * 3, "dpright")
+	end
+
+	if current_joy:isVibrationSupported() then
+		if x >= (500 + 600) and x <= (500 + 600 + 145) and y >= (-10 + 270) and y <= (-10 + 270 + 50) then
+			current_joy:setVibration(1,0,1)
+		end
+		if x >= (500 + 600) and x <= (500 + 600 + 145) and y >= (-10 + 270 + 60) and y <= (-10 + 270 + 60 + 50) then
+			current_joy:setVibration(0,1,1)
+		end
 	end
 end
 
