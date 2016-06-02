@@ -116,6 +116,7 @@ b5070000000000001302000000000000,Mega World USB 2-Axis 8-Button Gamepad,a:b3,b:b
 
 03000000b50700001302000000010000,Mega World USB 2-Axis 8-Button Gamepad,a:b3,b:b2,x:b1,y:b0,leftx:a0,start:b4,back:b5,lefty:a1,platform:Linux,
 0300000011040000c600000010010000,BUFFALO BGC-FC801 USB Gamepad,a:b0,b:b1,x:b2,y:b3,leftx:a0,start:b6,back:b7,lefty:a1,leftshoulder:b4,rightshoulder:b5,platform:Linux,
+0300000081170000560e000011010000,FeiYing Model KMODEL Simulator - G4-G7 and Above Controller,lefty:a0,rightx:a1,righty:a2,lefttrigger:a3,leftx:a4,platform:Linux,
 
 # Android
 

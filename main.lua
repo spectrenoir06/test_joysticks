@@ -132,8 +132,17 @@ function keymapClear(guid, name)
 end
 
 function keymapSetKey(guid, name, key, type, value, hatdir)
+	local guid, name, data = keymapToTab(guid or current_joy:getGUID())
+	if not guid then
+		guid = current_joy:getGUID()
+		name = current_joy:getName()
+		print("keymapSetKey",guid,name,key,type,value)
+	end
+
+	data = data or {}
+
 	print("keymapSetKey",guid,name,key,type,value)
-	local guid, name, data = keymapToTab(guid)
+
 	-- print(data[key])
 
 	if key == "triggerleft" then key = "lefttrigger" end
@@ -189,6 +198,13 @@ end
 
 
 function love.update(dt)
+	if modif then
+		modif_time = modif_time + dt
+		if modif_time > 5 then
+			modif_time = 0
+			modif = false
+		end
+	end
 end
 
 
@@ -236,6 +252,7 @@ function drawPopup()
 	end
 	gr.setColor(50,50,50)
 	love.graphics.print(modif_type, x + 20, y + 40)
+	love.graphics.print("for cancel press ESC or wait "..math.ceil(5 - modif_time).." seconds", x + 20, y + 60)
 end
 
 function drawIcone(x,y, name)
@@ -609,8 +626,12 @@ end
 
 function love.keypressed(key)
 	if key=="escape" then
-		love.event.quit()
-		print(love.joystick.saveGamepadMappings())
+		if modif then
+			modif = false
+		else
+			print(love.joystick.saveGamepadMappings())
+			love.event.quit()
+		end
 	end
 	if key == "up" then
 		local tab = {}
@@ -764,6 +785,7 @@ function mouseSingleInput(mouseX, mouseY, x, y, key)
 	then
 		print(key)
 		modif = key
+		modif_time = 0
 		if isButton(key) then
 			modif_type = "button"
 		else
