@@ -8,7 +8,7 @@ Todo
 - [x] Edit gamepad mappings
 - [ ] Save gamepad mappings (to clipboard and to a file)
 - [ ] Load gamepad mappings (drag and drop)
-- [ ] Button to test vibration
+- [x] Button to test vibration
 
 Screenshot
 ----
