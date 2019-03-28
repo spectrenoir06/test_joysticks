@@ -122,3 +122,4 @@ b5070000000000001302000000000000,Mega World USB 2-Axis 8-Button Gamepad,a:b3,b:b
 
 58424f58000000000000000000000000,GPD XD XBOX Controller,,a:b0,b:b1,x:b2,y:b3,leftx:a0,lefty:a1,rightx:a2,righty:a3,lefttrigger:a4,righttrigger:a5,leftstick:b7,rightstick:b8,dpup:b11,dpdown:b12,dpleft:b13,dpright:b14,start:b6,back:b4,leftshoulder:b9,rightshoulder:b10,platform:Android,
 504c415953544154494f4e2852293300,GPD XD PS3 Controller,a:b0,b:b1,x:b2,y:b3,leftx:a0,lefty:a1,rightx:a2,righty:a3,lefttrigger:a4,righttrigger:a5,leftstick:b7,rightstick:b8,dpup:b11,dpdown:b12,dpleft:b13,dpright:b14,start:b6,back:b4,leftshoulder:b9,rightshoulder:b10,platform:Android,
+38426974646f20534633302050726f00,8Bitdo SF30 Pro,x:b2,rightx:a3,rightshoulder:b18,y:b17,rightstick:b16,b:b0,back:b9,lefttrigger:a2,leftx:a0,dpleft:h0.8,dpright:h0.2,dpdown:h0.4,dpup:h0.1,lefty:a1,start:b10,righttrigger:a5,righty:a4,leftstick:b15,a:b1,leftshoulder:b3,platform:Android,
