@@ -7,7 +7,7 @@ function love.load()
 	js=love.joystick
 
 	setColor = function(r,g,b,a)
-		if not a then a = 0 end
+		if not a then a = 255 end
 		gr.setColor(r/255,g/255,b/255,a/255)
 	end
 
@@ -189,11 +189,13 @@ function isButton(key)
 end
 
 function love.joystickadded(joy)
+	print("add joy", joy)
 	joysticks[joy] = joy
 	if not current_joy then current_joy = joy end
 end
 
 function love.joystickremoved(joy)
+	print("remove joy", joy)
 	joysticks[joy] = nil
 	if current_joy == joy then
 		current_joy = nil
